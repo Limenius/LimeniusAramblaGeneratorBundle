@@ -45,7 +45,6 @@ class DoctrineGeneratorTest extends \PHPUnit_Framework_TestCase
         return $registry;
     }
 
-
     public function getManager()
     {
         $manager = $this->getMock('Doctrine\ORM\EntityManagerInterface');
@@ -55,7 +54,6 @@ class DoctrineGeneratorTest extends \PHPUnit_Framework_TestCase
         return $manager;
     }
 
-    
     public function getConfiguration()
     {
         $config = $this->getMock('Doctrine\ORM\Configuration');

@@ -11,21 +11,21 @@ namespace Limenius\Bundle\AramblaGeneratorBundle\Tests\Command;
 
 use Symfony\Component\Console\Tester\CommandTester;
 use Sensio\Bundle\GeneratorBundle\Command\GenerateDoctrineEntityCommand;
-use Sensio\Bundle\GeneratorBundle\Test\GenerateCommandTest;
+use Sensio\Bundle\GeneratorBundle\Tests\Command\GenerateCommandTest;
 
-class GenerateDoctrineEntityCommandTest extends GenerateCommandTest
+class GenerateRamlEntityCommandTest extends GenerateCommandTest
 {
     /**
      * @dataProvider getNonInteractiveCommandData
      */
     public function testNonInteractiveCommand($options, $expected)
     {
-        list($entity, $format, $fields) = $expected;
+        list($bundle, $entity, $format, $schema) = $expected;
         $generator = $this->getGenerator();
         $generator
             ->expects($this->once())
             ->method('generate')
-            ->with($this->getBundle(), $entity, $format, $fields)
+            ->with($this->getBundle(), $entity, $format, $schema)
         ;
         $generator
             ->expects($this->any())
@@ -39,7 +39,22 @@ class GenerateDoctrineEntityCommandTest extends GenerateCommandTest
     public function getNonInteractiveCommandData()
     {
         return array(
-            array(array('--raml' => 'Tests/Command/Fixtures/simple.raml'), array('--bundle' => 'AcmeBlogBundle:Blog')),
+            array(array(0 => 'Tests/Command/Fixtures/simple.raml',  array('--bundle' => 'AcmeBlogBundle'), array('--format' => 'annotation')),
+            array('AcmeBlogBundle', 'Song', 'annotation', array(
+                'type' => 'object',
+                'description' => 'A canonical song',
+                'properties' => array(
+                    'title' => array(
+                        'type' => 'string'
+                    ),
+                    'artist' => array(
+                        'type' => 'string'
+                    )
+                ),
+                'required' => array(
+                    'title', 'artist'
+                )
+            )))
         );
     }
 

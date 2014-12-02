@@ -71,6 +71,7 @@ EOT
         $raml = Raml::load($raml_file);
         $schema = $raml['schemas']['song'];
         $entity = ucfirst('song');
+        print_r($schema);
 
         $generator->generate($bundle, $entity, $format, $schema, $input->getOption('with-repository'));
         $output->writeln('Generating the entity code: <info>OK</info>');
