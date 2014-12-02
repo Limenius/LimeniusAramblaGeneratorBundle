@@ -24,11 +24,5 @@
         "psr-0": { "Limenius\\Bundle\\AramblaGeneratorBundle": "" }
     },
     "target-dir": "Limenius/Bundle/AramblaGeneratorBundle",
-    "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.4.x-dev"
-        }
-    },
-    "repositories": [ { "type": "vcs", "url": "git@github.com:Limenius/arambla.git" } ]
+    "minimum-stability": "dev"
 }
