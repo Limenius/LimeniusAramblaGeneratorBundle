@@ -27,7 +27,6 @@ class DoctrineEntityGenerator
     {
         $fields = array();
 
-        print_r($schema);
         $properties = $schema['properties'];
 
         if (!isset($properties['id'])) {
