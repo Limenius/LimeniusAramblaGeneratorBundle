@@ -132,4 +132,3 @@ class DoctrineGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->filesystem->remove($this->tmpDir);
     }
 }
-
