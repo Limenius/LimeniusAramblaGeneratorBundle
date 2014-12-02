@@ -30,5 +30,5 @@
             "dev-master": "2.4.x-dev"
         }
     },
-    "repositories": [ { "type": "composer", "url": "http://localhost:9090" } ]
+    "repositories": [ { "type": "vcs", "url": "git@github.com:Limenius/arambla.git" } ]
 }
