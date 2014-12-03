@@ -3,21 +3,39 @@
 namespace Limenius\Bundle\AramblaGeneratorBundle\Command;
 
 use Limenius\Bundle\AramblaGeneratorBundle\Generator\DoctrineEntityGenerator;
-use Sensio\Bundle\GeneratorBundle\Command\Helper\DialogHelper;
+use Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Doctrine\DBAL\Types\Type;
 use Sensio\Bundle\GeneratorBundle\Command\Validators;
-use Sensio\Bundle\GeneratorBundle\Command\GeneratorCommand;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Limenius\Arambla\Raml;
 
-class GenerateRamlEntityCommand extends GeneratorCommand
+class GenerateRamlEntityCommand extends ContainerAwareCommand
 {
     protected $generator;
+
+    // only useful for unit tests
+    public function setGenerator(DoctrineEntityGenerator $generator)
+    {
+        $this->generator = $generator;
+    }
+
+    protected function getQuestionHelper()
+    {
+        $question = $this->getHelperSet()->get('question');
+        if (!$question || get_class($question) !== 'Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper') {
+            $this->getHelperSet()->set($question = new QuestionHelper());
+        }
+
+        return $question;
+    }
 
     protected function configure()
     {
@@ -54,9 +72,9 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dialog = $this->getDialogHelper();
+        $questionHelper = $this->getQuestionHelper();
         if ($input->isInteractive()) {
-            if (!$dialog->askConfirmation($output, $dialog->getQuestion('Do you confirm generation', 'yes', '?'), true)) {
+            if (!$questionHelper->ask($input, $output, new ConfirmationQuestion($questionHelper->getQuestion('Do you confirm generation', 'yes', '?'), true))) {
                 $output->writeln('<error>Command aborted</error>');
                 return 1;
             }
@@ -64,18 +82,17 @@ EOT
         $raml_file = $input->getArgument('raml_file');
         $bundle = Validators::validateBundleName($input->getOption('bundle'));
         $format = Validators::validateFormat($input->getOption('format'));
-        $dialog->writeSection($output, 'Entity generation');
+        $questionHelper->writeSection($output, 'Entity generation');
         $bundle = $this->getContainer()->get('kernel')->getBundle(str_replace('/', '\\', $bundle));
         $generator = $this->getGenerator();
-        $dialog->writeSection($output, 'OrwhatEntity generation');
+        $questionHelper->writeSection($output, 'OrwhatEntity generation');
         $raml = Raml::load($raml_file);
-        $schema = $raml['schemas']['song'];
+        $schema = $raml['schemas']['Song'];
         $entity = ucfirst('song');
-        print_r($schema);
 
         $generator->generate($bundle, $entity, $format, $schema, $input->getOption('with-repository'));
         $output->writeln('Generating the entity code: <info>OK</info>');
-        $dialog->writeGeneratorSummary($output, array());
+        $questionHelper->writeGeneratorSummary($output, array());
     }
 
     protected function getGenerator(BundleInterface $bundle = null)

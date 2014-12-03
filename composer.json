@@ -13,7 +13,7 @@
     "require": {
         "symfony/framework-bundle": "~2.2",
         "symfony/console": "~2.0",
-        "sensio/generator-bundle": "~2.4",
+        "sensio/generator-bundle": "dev-question_helper",
         "limenius/arambla": "dev-master"
     },
     "require-dev": {
@@ -24,5 +24,11 @@
         "psr-0": { "Limenius\\Bundle\\AramblaGeneratorBundle": "" }
     },
     "target-dir": "Limenius/Bundle/AramblaGeneratorBundle",
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/nacmartin/SensioGeneratorBundle.git"
+        }
+    ]
 }

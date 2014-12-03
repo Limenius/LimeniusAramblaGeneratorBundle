@@ -10,8 +10,9 @@
 namespace Limenius\Bundle\AramblaGeneratorBundle\Tests\Command;
 
 use Symfony\Component\Console\Tester\CommandTester;
-use Sensio\Bundle\GeneratorBundle\Command\GenerateDoctrineEntityCommand;
 use Sensio\Bundle\GeneratorBundle\Tests\Command\GenerateCommandTest;
+
+use Limenius\Bundle\AramblaGeneratorBundle\Command\GenerateRamlEntityCommand;
 
 class GenerateRamlEntityCommandTest extends GenerateCommandTest
 {
@@ -38,8 +39,8 @@ class GenerateRamlEntityCommandTest extends GenerateCommandTest
 
     public function getNonInteractiveCommandData()
     {
-        return array(
-            array(array(0 => 'Tests/Command/Fixtures/simple.raml',  array('--bundle' => 'AcmeBlogBundle'), array('--format' => 'annotation')),
+        return array(array(
+            array( 'raml_file' => dirname(__FILE__).'/../../Tests/Command/Fixtures/simple.raml', '--bundle' => 'AcmeBlogBundle', '--format' => 'annotation'),
             array('AcmeBlogBundle', 'Song', 'annotation', array(
                 'type' => 'object',
                 'description' => 'A canonical song',
@@ -54,13 +55,13 @@ class GenerateRamlEntityCommandTest extends GenerateCommandTest
                 'required' => array(
                     'title', 'artist'
                 )
-            )))
-        );
+            ))))
+        ;
     }
 
     protected function getCommand($generator, $input)
     {
-        $command = new GenerateDoctrineEntityCommand();
+        $command = new GenerateRamlEntityCommand();
         $command->setContainer($this->getContainer());
         $command->setHelperSet($this->getHelperSet($input));
         $command->setGenerator($generator);
