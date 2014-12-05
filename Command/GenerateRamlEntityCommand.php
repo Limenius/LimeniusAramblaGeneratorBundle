@@ -87,11 +87,13 @@ EOT
         $generator = $this->getGenerator();
         $questionHelper->writeSection($output, 'OrwhatEntity generation');
         $raml = Raml::load($raml_file);
-        $schema = $raml['schemas']['Song'];
-        $entity = ucfirst('song');
+        $schemas = $raml['schemas'];
+        foreach ($schemas as $title => $schema) {
+            $entity = ucfirst($title);
+            $generator->generate($bundle, $entity, $format, $schema, $input->getOption('with-repository'));
+            $output->writeln('Generating Entity '.$entity.' code: <info>OK</info>');
 
-        $generator->generate($bundle, $entity, $format, $schema, $input->getOption('with-repository'));
-        $output->writeln('Generating the entity code: <info>OK</info>');
+        }
         $questionHelper->writeGeneratorSummary($output, array());
     }
 
